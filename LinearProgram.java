@@ -474,11 +474,11 @@ public class LinearProgram {
 	}
 	
 	
-	public static LinearProgram read(String file)
+	public static LinearProgram read(File file)
 	{
 		LinearProgram r = null;
 		
-		if (file != null && (new File(file)).exists()) {
+		if (file != null && file.exists()) {
 		    try {
 		    	RandomAccessFile raf = new RandomAccessFile(file, "r");
 
@@ -493,18 +493,23 @@ public class LinearProgram {
 		    	line = raf.readLine();
 		    	r.col_labels = line.split(",");
 		    	for (int j=0; j < cols && j < r.col_labels.length; j++) {
+		    		r.col_labels[j] = r.col_labels[j].trim();
 		    		r.col_labels[j] = r.col_labels[j].substring(1, r.col_labels[j].length()-1);
 		    	}
 
 		    	// read a, e, b
 		    	for (int i=0; i < rows && (line=raf.readLine()) != null; i++) {
-		    		String[] laeb = line.split(",");
-		    		r.row_labels[i] = laeb[0].substring(1,laeb[0].length()-1);
-		    		r.b[i] = Double.parseDouble(laeb[1]);
-		    		char eq = laeb[2].charAt(0);
+		    		String[] lbea = line.split(",");
+		    		lbea[0] = lbea[0].trim();
+		    		r.row_labels[i] = lbea[0].substring(1,lbea[0].length()-1);
+		    		lbea[1] = lbea[1].trim();
+		    		r.b[i] = Double.parseDouble(lbea[1]);
+		    		lbea[2] = lbea[2].trim();
+		    		char eq = lbea[2].charAt(0);
 		    		r.e[i] = (eq == '<') ? Equality.LE : (eq == '=') ? Equality.EQ : Equality.GE;
-		    		for (int j=0; j < cols && j < laeb.length; j++) {
-		    			r.a[i][j] = Double.parseDouble(laeb[j+3]);
+		    		for (int j=0; j < cols && j < lbea.length; j++) {
+			    		lbea[j+3] = lbea[j+3].trim();
+		    			r.a[i][j] = Double.parseDouble(lbea[j+3]);
 		    		}
 		    	}
 
@@ -525,28 +530,67 @@ public class LinearProgram {
 	}
 
 
-	public void write()
+	public void write(PrintStream out)
 	{
-		System.out.println(rows+","+cols);
+		out.println(rows+","+cols);
 
-		System.out.print("\""+col_labels[0]+"\"");
+		out.print("\""+col_labels[0]+"\"");
 		for (int j=1; j < cols; j++) {
-			System.out.print(",\""+col_labels[j]+"\"");
+			out.print(",\""+col_labels[j]+"\"");
+		}
+		out.println();
+
+		for (int i=0; i < rows; i++) {
+			out.print("\""+row_labels[i]+"\",");
+			out.print(b[i]+"," + ((e[i] == Equality.LE) ? "<=" : (e[i] == Equality.EQ) ? "==" : ">="));
+			for (int j=0; j < cols; j++) {
+				out.print(","+a[i][j]);
+			}
+			out.println();
+		}
+
+		out.print("Z,"+c[0]);
+		for (int j=1; j < cols; j++) {
+			out.print(","+c[j]);
+		}
+		out.println();
+	}
+
+
+	public void write(File file)
+	{
+		try {
+			PrintStream out = new PrintStream(file);
+			
+			write(out);
+			
+			out.close();
+		} catch (Exception exception) {
+			System.err.println(exception);
+		}
+	}
+	
+	private void print_system()
+	{
+		System.out.printf("                         ");
+		for (int j=0; j < col_labels.length; j++) {
+			System.out.printf("%10.10s ", col_labels[j]);
 		}
 		System.out.println();
 
-		for (int i=0; i < rows; i++) {
-			System.out.print("\""+row_labels[0]+"\",");
-			System.out.print(b[i]+"," + ((e[i] == Equality.LE) ? "<" : (e[i] == Equality.EQ) ? "=" : ">"));
-			for (int j=0; j < cols; j++) {
-				System.out.print(","+a[i][j]);
+		for (int i=0; i < a.length; i++) {
+			System.out.printf("%10.10s ", row_labels[i]);
+			System.out.printf("%10.2f ", b[i]);
+			System.out.print(((e[i] == Equality.LE) ? "<= " : ((e[i] == Equality.EQ) ? "== " : ">= ")));
+			for (int j=0; j < a[i].length; j++) {
+				System.out.printf("%10.2f ", a[i][j]);
 			}
 			System.out.println();
 		}
 
-		System.out.print("Z,"+c[0]);
-		for (int j=1; j < cols; j++) {
-			System.out.print(","+c[j]);
+		System.out.printf("                    Z == ");
+		for (int j=0; j < c.length; j++) {
+			System.out.printf("%10.2f ", c[j]);
 		}
 		System.out.println();
 	}
@@ -554,8 +598,37 @@ public class LinearProgram {
 	
 	public static void main(String[] args) 
 	{
+		boolean windor = false;
+		boolean max    = false;
+		
 		System.out.println(System.getProperty("user.dir"));
-		LinearProgram lp = read("sample.csv");
-		lp.write();
+		LinearProgram lp = null;
+		if (windor) {
+			lp = read(new File("windor.csv"));
+		} else {
+			lp = read(new File("fish.csv"));
+		}
+		lp.print_system();
+		System.out.println();
+		
+		Simplex simplex = new Simplex(lp);
+		Simplex.State soln = null;
+		if (max) {
+			soln = simplex.maximize_system();
+		} else {
+			soln = simplex.minimize_system();
+		}
+		
+		if (soln == Simplex.State.SOLUTION) {
+			System.out.println("Z="+simplex.Z);
+			for (int i=0; i < simplex.x.length; i++) {
+				System.out.print(simplex.x[i]+" ");
+			}
+			System.out.println();
+		} else if (soln == Simplex.State.NO_SOLUTION) {
+			System.out.println("No Solution");
+		} else if (soln == Simplex.State.UNBOUNDED) {
+			System.out.println("Unbounded Solution");
+		}
 	}
 }

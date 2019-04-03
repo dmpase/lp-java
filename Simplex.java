@@ -41,8 +41,12 @@ public class Simplex {
 	public double[]   x = null;
 	public double     Z = 0;
 	
+	int aug_rows = 0;
+	int aug_cols = 0;
+    int extras   = 0;
+	
 	int   avct  = 0;
-	int[] av    = null;
+	int[] art_vars    = null;
 	int[] basic = null;
 
 	public Simplex(LinearProgram s)
@@ -54,7 +58,16 @@ public class Simplex {
 	public State minimize_system()
 	{
 	    setup_system(true);
-		State soln_type = simplex();
+	    
+		System.out.println("Setup");
+	    print_system();
+		System.out.println();
+
+	    State soln_type = simplex();
+	    
+		System.out.println("Simplex");
+	    print_system();
+		System.out.println();
 
 	    Z = -Z;
 
@@ -82,6 +95,10 @@ public class Simplex {
 	        }
 	    }
 	    
+		System.out.println("Minimize");
+	    print_system();
+		System.out.println();
+	    
 	    return soln_type;
 	}
 
@@ -89,7 +106,16 @@ public class Simplex {
 	public State maximize_system()
 	{
 	    setup_system(false);
+	    
+		System.out.println("Setup");
+	    print_system();
+		System.out.println();
+
 	    State soln_type = simplex();
+	    
+		System.out.println("Simplex");
+	    print_system();
+		System.out.println();
 	
 	    if (soln_type == State.SOLUTION || soln_type == State.UNBOUNDED) {
 	        for (int i=1; i <= system.rows; i++) {
@@ -114,6 +140,10 @@ public class Simplex {
 	            }
 	        }
 	    }
+	    
+		System.out.println("Maximize");
+	    print_system();
+		System.out.println();
 
 	    return soln_type;
 	}
@@ -121,9 +151,7 @@ public class Simplex {
 	
 	private void setup_system(boolean minimize)
 	{
-	    double M = 0;
-
-	    int extras = system.rows;
+	    extras = system.rows;
 	    boolean bigM = false;
 	    for (int i=1; i <= system.rows; i++) {
 	        switch (system.e[i-1]) {
@@ -138,6 +166,8 @@ public class Simplex {
 	            break;
 	        }
 	    }
+
+	    double M = 0;
 
 	    if (bigM) {
 	    	double MaxA, MaxB, MaxC;
@@ -161,23 +191,26 @@ public class Simplex {
 	        }
 	        M = max(MaxA, max(MaxB,MaxC)) * 128.0;
 	    }
+	    
+	    aug_rows = system.rows;
+	    aug_cols = system.cols + extras;
 
-	    A = new double[system.rows][system.cols+extras];
-	    B = new double[system.rows];
-	    C = new double[system.cols+extras];
+	    A = new double[aug_rows][aug_cols];
+	    B = new double[aug_rows];
+	    C = new double[aug_cols];
 	    x = new double[system.cols];
 	    Z = 0.0;
 
 	    basic = new int[system.rows];
-	    av    = new int[system.cols+system.rows+extras];
+	    art_vars    = new int[system.cols+extras];
 
 	    for (int j=1; j <= system.cols; j++) {
 	        C[j-1] = (minimize?1:-1)*system.c[j-1];
 	        x[j-1] = 0.0;
-	        av[j-1] = j;            // normal variable
+	        art_vars[j-1] = j;            // normal variable
 	    }
 
-	    for (int j=system.cols+1; j <= system.cols+extras; j++) {
+	    for (int j=system.cols+1; j <= aug_cols; j++) {
 	        C[j-1] = 0.0;
 	    }
 
@@ -195,16 +228,17 @@ public class Simplex {
 	        case LE :
 	            A[i-1][k-1] = 1.0;
 	            basic[i-1] = k;
-	            av[k-1] = k;                // slack variable
+	            art_vars[k-1] = k;                // slack variable
 	            k++;
 	            break;
 	        case GE :
-	            C[k=1] = M;
+	            C[k-1] = M;
 	            A[i-1][k-1] = -1.0;
-	            av[k-1] = k;                // surplus variable
+	            art_vars[k-1] = k;                // surplus variable
 	            k++;
+	            break;
 	        case EQ :
-	            Z -= system.b[i-1] * M;
+	            Z -= B[i-1] * M;
 	            for (int j=1; j <= system.cols; j++) {
 	        	    double oldC = C[j-1];
 	        	    double newC = oldC - A[i-1][j-1]*M;
@@ -212,7 +246,7 @@ public class Simplex {
 	            }
 	            A[i-1][k-1] = 1.0;
 	            basic[i-1] = -k;
-	            av[k-1] = -k;               // artificial variable
+	            art_vars[k-1] = -k;               // artificial variable
 	            avct++;
 	            k++;
 	            break;
@@ -221,11 +255,50 @@ public class Simplex {
 	        B[i-1] = system.b[i-1];
 	    }
 	}
+	
+	private void print_system()
+	{
+		for (int i=0; i < A.length; i++) {
+			System.out.printf("%8.2f = ", B[i]);
+			for (int j=0; j < A[i].length; j++) {
+				System.out.printf("%8.2f ", A[i][j]);
+			}
+			System.out.println();
+		}
+
+		System.out.printf("       C = ");
+		for (int j=0; j < C.length; j++) {
+			System.out.printf("%8.2f ", C[j]);
+		}
+		System.out.println();
+
+		System.out.printf("       x = ");
+		for (int j=0; j < x.length; j++) {
+			System.out.printf("%8.2f ", x[j]);
+		}
+		System.out.println();
+
+		System.out.printf("   basic = ");
+		for (int j=0; j < basic.length; j++) {
+			System.out.printf("%8d ", basic[j]);
+		}
+		System.out.println();
+
+		System.out.printf("art_vars = ");
+		for (int j=0; j < art_vars.length; j++) {
+			System.out.printf("%8d ", art_vars[j]);
+		}
+		System.out.println();
+
+		System.out.printf("  extras = %8d\n", extras);
+		System.out.printf("       Z = %8.2f\n", Z);
+	}
 
 	
 	private State simplex()
 	{
-		if (! system.is_valid() || system.cols <= system.rows) {
+		if (! system.is_valid() || aug_cols <= aug_rows) {
+			System.err.println("No Solution: cols="+aug_cols+" rows="+aug_rows);
 			return State.NO_SOLUTION;
 		}
 		
@@ -235,11 +308,10 @@ public class Simplex {
 	        // update basic, a and c
 
 		State result = State.SOLUTION;
-		int pc = 0;
-		while ((pc=pivot_col()) != 0) {
+		for (int pc=pivot_col(); pc != 0; pc=pivot_col()) {
 			int pr = pivot_row(pc);
 
-	        if (0 < pr) {
+	        if (0 != pr) {
 	            if ((result=lp_update(pr, pc)) != State.SOLUTION) {
 	                break;
 	            }
@@ -258,7 +330,7 @@ public class Simplex {
 	{
 	    int j = 0;                              // search across the columns
 	    double e = 0.0;
-	    for (int i=1; i <= C.length; i++) {
+	    for (int i=1; i <= aug_cols; i++) {
 	        double f = C[i-1];
 	        if (f < e) {
 	            j = i;
@@ -274,7 +346,7 @@ public class Simplex {
 	{
 	    int j = 0;                              // search down the rows
 	    double e = 0.0;
-	    for (int i=1; i <= A.length; i++) {
+	    for (int i=1; i <= aug_rows; i++) {
 	        double f = B[i-1];
 	        double g = A[i-1][pc-1];
 	        if (g > 0.0) {
@@ -300,37 +372,38 @@ public class Simplex {
 	    double pivot = A[pr-1][pc-1];
 
 	    // update pivot row
-	    for (int j=1; j <= system.cols; j++) {
+	    for (int j=1; j <= aug_cols; j++) {
 	        A[pr-1][j-1] = A[pr-1][j-1]/pivot;
 	    }
 	    B[pr-1] = B[pr-1]/pivot;
 
 	                                // update c vector
 	    double aux = C[pc-1];
-	    for (int j=1; j <= system.cols; j++) {
+	    for (int j=1; j <= aug_cols; j++) {
 	        C[j-1] = C[j-1]-(aux*A[pr-1][j-1]);
 	    }
 	    Z = Z-(aux*B[pr-1]);
 
 	                                // update matrix a
-	    for (int i=1; i <= system.rows; i++) {
+	    for (int i=1; i <= aug_rows; i++) {
 	        aux = A[i-1][pc-1];
-	        if (i == pr || aux == 0.0)
+	        if (i == pr || aux == 0.0) {
 	            continue;
+	        }
 
-	        for (int j=1; j <= system.cols; j++) {
+	        for (int j=1; j <= aug_cols; j++) {
 	            A[i-1][j-1] = (A[i-1][j-1]-aux*A[pr-1][j-1]);
 	        }
 	        B[i-1] = (B[i-1]-aux*B[pr-1]);
 	    }
 
-	    if (0 < avct && basic[pr-1] < 0 && av[pc-1] > 0) {
+	    if (0 < avct && basic[pr-1] < 0 && art_vars[pc-1] > 0) {
 	        avct--;
-	    } else if (0 < avct && basic[pr-1] > 0 && av[pc-1] < 0) {
+	    } else if (0 < avct && basic[pr-1] > 0 && art_vars[pc-1] < 0) {
 	        avct++;
 	    }
 
-	    basic[pr-1] = av[pc-1];
+	    basic[pr-1] = art_vars[pc-1];
 
 	    return State.SOLUTION;
 	}
