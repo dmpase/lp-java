@@ -1,0 +1,18 @@
+minimize
+2,3
+     "x1","x2","x3"
+"c1",   1,   3,   0, <=, 7
+"c2",   0,   4,   1, <=, 5
+ "C",  10,  16,  -5
+
+# Minimize C
+# Ans. C=-25, x1=0, x2=0, x3=5
+
+# Example is from https://www.youtube.com/watch?v=rpU2vV_PlVE
+# created by:
+# Kayla Harville, PhD 
+# Instructor and Director of Freshman Mathematics
+# Ph.D., University of Mississippi, 2013
+# Hume Hall 305C
+# (662) 915-7410 | kdharvil@olemiss.edu
+# https://math.olemiss.edu/kayla-davis-harville/

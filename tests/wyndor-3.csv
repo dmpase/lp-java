@@ -1,0 +1,13 @@
+# Wyndor optimization problem #3
+# The problem is changed from the original by
+# forcing Plant 3 to operate at full production.
+
+# Ans. is x1=2, x2=6, Z=36.
+
+maximize
+3,2
+          "Door","Window"
+"Plant 1",     1,      0, <=, 4
+"Plant 2",     0,      2, <=, 12
+"Plant 3",     3,      2, ==, 18
+      "Z",     3,      5

@@ -1,0 +1,13 @@
+# Wyndor optimization problem #2
+# Problem is changed to have many optimal solutions,
+# all along the line (4,3) to (2,6).
+
+# Ans. is x1=4.0, x2=3.0, Z=18.0.
+
+maximize
+3,2
+          "Door","Window"
+"Plant 1",     1,      0, <=, 4
+"Plant 2",     0,      2, <=, 12
+"Plant 3",     3,      2, <=, 18
+ "Profit",     3,      2

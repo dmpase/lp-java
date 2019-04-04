@@ -1,0 +1,11 @@
+# Maximize profits for the Wyndor Window and Door company.
+
+# Ans. is x1=2.0, x2=6.0, Z=36.0.
+
+maximize
+3,2
+          "Door","Window"
+"Plant 1",     1,      0, <=, 4
+"Plant 2",     0,      2, <=, 12
+"Plant 3",     3,      2, <=, 18
+      "Z",     3,      5

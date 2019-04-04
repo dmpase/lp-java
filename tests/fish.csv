@@ -1,0 +1,22 @@
+# Optimize the cost of feeding fish at a fish farm.
+# Fish must have minimum amounts of protein and calcium.
+# Three brands - A, B, and C - to choose from.
+# Costs per unit are $50, $30 and $75, respectively.
+
+# File format is:
+# {minimize|maximize}
+# m,n
+# <column labels>
+# "row label(1)", a(1,1), a(1,2), ..., a(1,n), {<=|==|>=}, b(1)
+# "row label(2)", a(2,1), a(2,2), ..., a(2,n), {<=|==|>=}, b(2)
+# ...
+# "row label(m)", a(m,1), a(m,2), ..., a(m,n), {<=|==|>=}, b(m)
+# "obj. label",   c(1),   c(2),   ..., c(n)
+
+
+minimize
+2,3
+          "Brand A","Brand B","Brand C"
+"Protein",        2,        1,        4, >=, 10
+"Calcium",       12,       14,       14, >=, 84
+   "Cost",       50,       30,       75

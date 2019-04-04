@@ -1,0 +1,18 @@
+minimize
+2,3
+                  "A",  "B",  "C"
+"Protein"      ,   10,   10,   20, >=, 120
+"Carbohydrates",    2,    3,    4, >=, 32
+"Cost"         , 0.46, 0.27, 0.70
+
+# Minimize Cost
+# Ans. Cost=$3.56 when x1=0, x2=12, x3=0
+
+# Example is from https://www.youtube.com/watch?v=rpU2vV_PlVE
+# created by:
+# Kayla Harville, PhD 
+# Instructor and Director of Freshman Mathematics
+# Ph.D., University of Mississippi, 2013
+# Hume Hall 305C
+# (662) 915-7410 | kdharvil@olemiss.edu
+# https://math.olemiss.edu/kayla-davis-harville/

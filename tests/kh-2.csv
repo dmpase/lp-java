@@ -1,0 +1,18 @@
+minimize
+2,2
+     "x1","x2"
+"c1",   1,   1, <=, 20
+"c2",   5,   3, >=, 75
+ "P",   2, -10
+
+# Minimize P
+# Ans. P=-110, x1=7.5, x2=12.5
+
+# Example is from https://www.youtube.com/watch?v=rpU2vV_PlVE
+# created by:
+# Kayla Harville, PhD 
+# Instructor and Director of Freshman Mathematics
+# Ph.D., University of Mississippi, 2013
+# Hume Hall 305C
+# (662) 915-7410 | kdharvil@olemiss.edu
+# https://math.olemiss.edu/kayla-davis-harville/
