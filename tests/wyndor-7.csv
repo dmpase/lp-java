@@ -19,3 +19,7 @@ minimize
 # 3*3 + 6*2 = 21 - not minimal
 # 2*3 + 6*2 = 18 - minimal and meets constraints
 # 1*3 + 6*2 = 15 - does not meet constraints
+
+# This problem is from "Operations Research" by
+# Hillier and Lieberman, 2nd Ed., Copyright 1967 
+# and 1974.

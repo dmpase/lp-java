@@ -9,3 +9,7 @@ maximize
 "Plant 2",     0,      2, <=, 12
 "Plant 3",     3,      2, <=, 18
       "Z",     3,      5
+
+# This problem is from "Operations Research" by
+# Hillier and Lieberman, 2nd Ed., Copyright 1967 
+# and 1974.
