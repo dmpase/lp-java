@@ -11,21 +11,20 @@ text file is simple enough and will be explained shortly.
 Linear programming problems consist of three components, namely, the optimization to be performed (i.e., maximize or minimize), 
 a system of linear constraints, and a linear objective function. The system of linear constraints takes the form:
 
+<PRE>
 Ax <= b
+</PRE>
 
 Where A is an _m_ x _n_ matrix representing _m_ equations or inequalities in _n_ unknowns. In other words, they are the form:
 
+<PRE>
 a[1][1]*x[1] + ... + a[1][n]*x[n] <= b[1]
-
 a[2][1]*x[1] + ... + a[2][n]*x[n] <= b[2]
-
 ... 
-
 a[i][1]*x[1] + ... + a[i][n]*x[n] <= b[i]
-
 ...
-
 a[m][1]*x[1] + ... + a[m][n]*x[n] <= b[m]
+</PRE>
 
 In this example, a[i][j] and b[i] can be any value, and the constraint '<=' can be any of the three relational operators 
 '<=', '==' or '>='. However, the x[j] values will only be non-negative (i.e., zero or positive).
