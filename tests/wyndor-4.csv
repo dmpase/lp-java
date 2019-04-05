@@ -1,5 +1,5 @@
-# Wyndor optimization problem #3
-# The problem is changed from the original by
+# Wyndor optimization problem #4
+# The problem is modified from the original by
 # forcing Plants 2 & 3 to operate at full production.
 
 # Ans. is x1=2, x2=6, Z=36.
@@ -12,6 +12,6 @@ maximize
 "Plant 3",     3,      2, ==, 18
       "Z",     3,      5
 
-# This problem is from "Operations Research" by
-# Hillier and Lieberman, 2nd Ed., Copyright 1967 
+# This problem is adapted from "Operations Research" 
+# by Hillier and Lieberman, 2nd Ed., Copyright 1967 
 # and 1974.

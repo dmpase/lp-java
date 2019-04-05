@@ -1,4 +1,4 @@
-# Maximize profits for the Wyndor Window and Door company.
+# Wyndor optimization problem #7
 # This version is modified to include all three constraint types.
 # The answer is the same as for the original problem.
 # This problem is different from wyndor-6 in that the order of 
