@@ -16,10 +16,15 @@ Ax <= b
 Where A is an _m_ x _n_ matrix representing _m_ equations or inequalities in _n_ unknowns. In other words, they are the form:
 
 a[1][1]*x[1] + ... + a[1][n]*x[n] <= b[1]
+
 a[2][1]*x[1] + ... + a[2][n]*x[n] <= b[2]
+
 ... 
+
 a[i][1]*x[1] + ... + a[i][n]*x[n] <= b[i]
+
 ...
+
 a[m][1]*x[1] + ... + a[m][n]*x[n] <= b[m]
 
 In this example, a[i][j] and b[i] can be any value, and the constraint '<=' can be any of the three relational operators 
@@ -56,15 +61,27 @@ value b[i].
 The **objective function** is itself a list of real values starting with a label in quotes.
 
 An example file follows:
+
   1 # Optimize the cost of feeding fish at a fish farm.
+
   2 # Fish must have minimum amounts of protein and calcium.
+
   3 # Three brands - A, B, and C - to choose from.
+
   4 # Costs per unit are $50, $30 and $75, respectively.
+
   5
+
   6 minimize
+
   7 2,3
+
   8           "Brand A","Brand B","Brand C"
+
   9 "Protein",        2,        1,        4, >=, 10
+
  10 "Calcium",       12,       14,       14, >=, 84
+
  11    "Cost",       50,       30,       75
+
 
