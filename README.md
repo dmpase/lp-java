@@ -15,7 +15,7 @@ a system of linear constraints, and a linear objective function. The system of l
 Ax <= b
 </PRE>
 
-Where A is an _m_ x _n_ matrix representing _m_ equations or inequalities in _n_ unknowns. In other words, they are the form:
+Here A is an _m_ x _n_ matrix representing _m_ equations or inequalities in _n_ unknowns. In other words, they are the form:
 
 <PRE>
 a[1][1]*x[1] + ... + a[1][n]*x[n] <= b[1]
