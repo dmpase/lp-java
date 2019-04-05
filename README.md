@@ -31,7 +31,9 @@ In this example, a[i][j] and b[i] can be any value, and the constraint '<=' can 
 
 The objective function takes the form:
 
-Z = c[1]x[1] c[2]x[2] + ... + c[n]x[n]
+<PRE>
+Z = c[1]*x[1] + c[2]*x[2] + ... + c[n]*x[n]
+</PRE>
 
 The task is to maximize or minimize the value Z subject to the constraint Ax <= b and x[i] >= 0.
 
