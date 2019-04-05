@@ -62,26 +62,17 @@ The **objective function** is itself a list of real values starting with a label
 
 An example file follows:
 
+<PRE>
   1 # Optimize the cost of feeding fish at a fish farm.
-
   2 # Fish must have minimum amounts of protein and calcium.
-
   3 # Three brands - A, B, and C - to choose from.
-
   4 # Costs per unit are $50, $30 and $75, respectively.
-
   5
-
   6 minimize
-
   7 2,3
-
   8           "Brand A","Brand B","Brand C"
-
   9 "Protein",        2,        1,        4, >=, 10
-
  10 "Calcium",       12,       14,       14, >=, 84
-
  11    "Cost",       50,       30,       75
-
+</PRE>
 
