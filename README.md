@@ -12,7 +12,7 @@ Linear programming problems consist of three components, namely, the optimizatio
 a system of linear constraints, and a linear objective function. The system of linear constraints takes the form:
 
 <PRE>
-Ax <= b
+Ax &le; b
 </PRE>
 
 Here A is an _m_ x _n_ matrix representing _m_ equations or inequalities in _n_ unknowns. In other words, they are the form:
