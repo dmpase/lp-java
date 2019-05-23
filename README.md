@@ -18,16 +18,16 @@ Ax &le; b
 Here A is an _m_ x _n_ matrix representing _m_ equations or inequalities in _n_ unknowns. In other words, they are the form:
 
 <PRE>
-a[1][1]*x[1] + ... + a[1][n]*x[n] <= b[1]
-a[2][1]*x[1] + ... + a[2][n]*x[n] <= b[2]
+a[1][1]*x[1] + ... + a[1][n]*x[n] &le; b[1]
+a[2][1]*x[1] + ... + a[2][n]*x[n] &le; b[2]
                ... 
-a[i][1]*x[1] + ... + a[i][n]*x[n] <= b[i]
+a[i][1]*x[1] + ... + a[i][n]*x[n] &le; b[i]
                ... 
-a[m][1]*x[1] + ... + a[m][n]*x[n] <= b[m]
+a[m][1]*x[1] + ... + a[m][n]*x[n] &le; b[m]
 </PRE>
 
-In this example, a[i][j] and b[i] can be any value, and the constraint '<=' can be any of the three relational operators 
-'<=', '==' or '>='. However, the x[j] values will only be non-negative (i.e., zero or positive).
+In this example, a[i][j] and b[i] can be any value, and the constraint '&le;' can be any of the three relational operators 
+'&le;', '=' or '&ge;'. However, the x[j] values will only be non-negative (i.e., zero or positive).
 
 The objective function takes the form:
 
@@ -35,7 +35,7 @@ The objective function takes the form:
 Z = c[1]*x[1] + c[2]*x[2] + ... + c[n]*x[n]
 </PRE>
 
-The task is to maximize or minimize the value Z subject to the constraint Ax <= b and x[i] >= 0.
+The task is to maximize or minimize the value Z subject to the constraint Ax &le; b and x[i] &ge; 0.
 
 File structure is all based on a line, with values separated by commas and text fields enclosed in quotes. The lines must be 
 presented in a specific order, but blank lines and lines that begin the '#' character are ignored. The order is:
@@ -55,8 +55,8 @@ columns in the constraint matrix **A**.
 are enclosed in quotes and must not, themselves, contain commas. The quotes are not actually checked but they are assumed
 to be there and are removed.
 
-**Constraints** are the **m** rows of the Ax <= b constraints. The first field of each row is a row label, followed by 
-**n** real values of a[i], followed by the one of the three relational operators listed above, followed by the real
+**Constraints** are the **m** rows of the Ax &le; b constraints. The first field of each row is a row label, followed by 
+**n** real values of a[i], followed by the one of the three relational operators '<=', '==', or '>=', followed by the real
 value b[i].
 
 The **objective function** is itself a list of real values starting with a label in quotes.
